@@ -29,9 +29,28 @@
         <Border HorizontalAlignment="Left" BorderBrush="Black" BorderThickness="1" Background="AliceBlue" Margin="0,0,0,0" Width="124">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="0,0,0,0" Width="124">
-                    <Button x:Name="loadImageButton" Content="Открыть..." Margin="4,4,0,0" Height="40" Width="70" DockPanel.Dock="Top" HorizontalAlignment="Left" Click="loadImageButton_Click"/>
-                    <Button x:Name="saveImageButton" Content="Сохранить" Width="70" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="4,4,0,0" Height="40" Click="saveImageButton_Click"/>
-                    <Button x:Name="preCropImageButton" Content="Обрезать" Width="70" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="4,4,0,0" Height="40" Click="preCropImageButton_Click"/>
+                    <Button x:Name="loadImageButton" Content="Открыть..." Margin="4,4,0,0" Height="40" Width="102" DockPanel.Dock="Top" HorizontalAlignment="Left" Click="loadImageButton_Click"/>
+                    <Button x:Name="saveImageButton" Content="Сохранить" Width="102" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="4,4,0,0" Height="40" Click="saveImageButton_Click"/>
+                    <Button x:Name="preCropImageButton" Content="Обрезать" Width="102" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="4,4,0,0" Height="40" Click="preCropImageButton_Click"/>
+                    <Button x:Name="addTextButton" Content="Добавить текст" Width="102" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="4,4,0,0" Height="41" Click="addTextButton_Click"/>
+                    <TextBlock Text="Яркость:" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="10,5,0,0"/>
+                    <Slider x:Name="sliderBrightness" Width="100" Minimum="0" Maximum="100" Value="50" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="4,5,0,0" ValueChanged="brightness_ValueChanged"/>
+                    <TextBlock Text="R:" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="10,5,0,0"/>
+                    <Slider x:Name="sliderR" Width="100" Minimum="0" Maximum="100" Value="0" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="4,5,0,0" ValueChanged="R_ValueChanged"/>
+                    <TextBlock Text="G:" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="10,5,0,0"/>
+                    <Slider x:Name="sliderG" Width="100" Minimum="0" Maximum="100" Value="0" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="4,5,0,0" ValueChanged="G_ValueChanged"/>
+                    <TextBlock Text="B:" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="10,5,0,0"/>
+                    <Slider x:Name="sliderB" Width="100" Minimum="0" Maximum="100" Value="0" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="4,5,0,0" ValueChanged="B_ValueChanged"/>
+                    <TextBlock Text="A:" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="10,5,0,0"/>
+                    <Slider x:Name="sliderA" Width="100" Minimum="0" Maximum="100" Value="0" DockPanel.Dock ="Top" HorizontalAlignment="Left" Margin="4,5,0,0" ValueChanged="A_ValueChanged"/>
+                    <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="0,0,0,0" Width="86" Height="24" DockPanel.Dock="Top">
+                        <Button x:Name="buttonPaint"  Width="30" DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="4,4,0,0" Height="20" Click="paintButton_Click">
+                            <Image Source="/Images\paint.jpg"/>
+                        </Button>
+                        <Button x:Name="buttonMouse"  Width="30" DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="10,4,0,0" Height="20" Click="mouseButton_Click">
+                            <Image Source="/Images\mouse.png"/>
+                        </Button>
+                    </DockPanel>
                     <DockPanel HorizontalAlignment="Left" LastChildFill="False" Margin="0,0,0,0" Width="86" Height="24" DockPanel.Dock="Top">
                         <Button x:Name="cropImageButton" Content="да" Width="30" DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="4,4,0,0" Height="20" Visibility="Hidden" Click="cropImageButton_Click"/>
                         <Button x:Name="cancelCropImageButton" Content="нет" Width="30" DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="10,4,0,0" Height="20" Visibility="Hidden" Click="cancelCropImageButton_Click"/>
@@ -52,7 +71,7 @@
                     <DockPanel x:Name="CollageMode" Visibility="Hidden" HorizontalAlignment="Left" LastChildFill="False" Margin="0,0,0,0" Width="86" Height="48" DockPanel.Dock="Top">
                         <Button x:Name="addImageButton" Content="Добавить..." Margin="4,4,0,0" Height="40" Width="70" DockPanel.Dock="Top" HorizontalAlignment="Left" Click="addImageButton_Click"/>
                     </DockPanel>
-                    <Button x:Name="addTextButton" Content="Добавить текст" Width="95" HorizontalAlignment="Left" Margin="4,4,0,0" Height="40" Click="preCropImageButton_Click"/>
+                    
                 </DockPanel>
             </ScrollViewer>
         </Border>

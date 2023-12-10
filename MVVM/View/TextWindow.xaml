@@ -1,4 +1,4 @@
-﻿<Window x:Class="PictureViewer.MVVM.View.Window1"
+﻿<Window x:Class="PictureViewer.MVVM.View.TextWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="TextWindow" Height="400" Width="350">
     <Grid>
-        <TextBox HorizontalAlignment="Center" Margin="0,55,0,0" TextWrapping="Wrap" Text="Введите текст.."  VerticalAlignment="Top" Width="182" Height="46"/>
-        <TextBox HorizontalAlignment="Left" Margin="134,126,0,0" TextWrapping="Wrap" Text="px" VerticalAlignment="Top" Width="132" Height="22"/>
+        <TextBox Name="textContent" HorizontalAlignment="Center" Margin="0,55,0,0" TextWrapping="Wrap" Text="Введите текст.."  VerticalAlignment="Top" Width="182" Height="46"/>
+        <TextBox Name="textSize" HorizontalAlignment="Left" Margin="134,126,0,0" TextWrapping="Wrap" Text="px" VerticalAlignment="Top" Width="132" Height="22"/>
         <Label Content="Размер" HorizontalAlignment="Left" Margin="84,122,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.579"/>
         <Label Content="Координаты:" HorizontalAlignment="Left" Margin="84,153,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.579"/>
-        <TextBox HorizontalAlignment="Left" Margin="134,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="132" Height="22"/>
+        <TextBox Name="textPosX" HorizontalAlignment="Left" Margin="134,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="132" Height="22"/>
         <Label Content="Ось X:" HorizontalAlignment="Left" Margin="84,184,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.579"/>
-        <TextBox HorizontalAlignment="Left" Margin="134,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="132" Height="22"/>
+        <TextBox Name="textPosY" HorizontalAlignment="Left" Margin="134,231,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="132" Height="22"/>
         <Label Content="Ось Y:" HorizontalAlignment="Left" Margin="84,227,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.526,0.579"/>
-        <Button Content="Добавить" HorizontalAlignment="Center" Margin="0,303,0,0" VerticalAlignment="Top" Height="50" Width="101"/>
+        <Button Name="buttonAddText" Content="Добавить" HorizontalAlignment="Center" Margin="0,303,0,0" VerticalAlignment="Top" Height="50" Width="101" Click="buttonAddText_Click"/>
     </Grid>
 </Window>

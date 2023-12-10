@@ -42,6 +42,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Drawing.Common.8.0.0\lib\net462\System.Drawing.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -79,7 +82,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\Model\ImageProcessor.cs" />
-    <Compile Include="MVVM\Model\TextLabel.cs" />
+    <Compile Include="MVVM\Model\PaintProcessor.cs" />
+    <Compile Include="MVVM\Model\TextProcessor.cs" />
     <Compile Include="MVVM\View\TextWindow.xaml.cs">
       <DependentUpon>TextWindow.xaml</DependentUpon>
     </Compile>
@@ -100,6 +104,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -110,6 +115,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MVVM\ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\paint.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mouse.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using PictureViewer.MVVM.Model;
+using PictureViewer.MVVM.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,19 +38,26 @@ namespace PictureViewer
             InitializeComponent();
         }
 
-        private ObservableCollection<TextLabel> textLabels = new ObservableCollection<TextLabel>();
-        private TextLabel selectedTextLabel;
-        private bool isDragging = false;
-        private Point startPosition;
         private ImageProcessor imageProcessor = new ImageProcessor();
 
         //public Image Crop(int x, int y, int width, int height) {}
 
         private void loadImageButton_Click(object sender, RoutedEventArgs e)
         {
-            imageProcessor.LoadImage(workingImage);
+            if(imageProcessor.GIGAImage != null)
+            {
+                imageProcessor.GIGAImage.Source = imageProcessor.LoadImage(workingImage).Source;
+            }
+            else
+            {
+
+            }
         }
 
+        private void addTextButton_Click(Object sender, RoutedEventArgs e)
+        {
+            imageProcessor.AddTextToImage(workingImage);
+        }
         private void preCropImageButton_Click(object sender, RoutedEventArgs e)
         {
             cropImageButton.Visibility = Visibility.Visible;
@@ -61,7 +69,7 @@ namespace PictureViewer
 
         private void cropImageButton_Click(object sender, RoutedEventArgs e)
         {
-            imageProcessor.CropImage(workingImage);
+            imageProcessor.GIGAImage.Source = imageProcessor.CropImage(workingImage).Source;
 
             cropRectOut.Rect = new Rect();
             cropRectIn.Rect = new Rect();
@@ -80,18 +88,73 @@ namespace PictureViewer
 
         private void turnCWImageButton_Click(object sender, RoutedEventArgs e)
         {
-            imageProcessor.turnCWImage(workingImage);
+            imageProcessor.GIGAImage.Source = imageProcessor.turnCWImage(workingImage).Source;
         }
 
         private void turnCCWImageButton_Click(object sender, RoutedEventArgs e)
         {
-            imageProcessor.turnCCWImage(workingImage);
+            imageProcessor.GIGAImage.Source = imageProcessor.turnCCWImage(workingImage).Source;
         }
 
 
         private void saveImageButton_Click(object sender, RoutedEventArgs e)
         {
-            imageProcessor.saveImage(workingImage);
+           imageProcessor.saveImage(workingImage);
+        }
+
+        private void brightness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if(imageProcessor.GIGAImage != null)
+            {
+                workingImage.Source = imageProcessor.GIGAImage.Source;
+            }
+           imageProcessor.AdjustBrightness(workingImage, sliderBrightness.Value);
+        }
+
+        private void R_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (imageProcessor.GIGAImage != null)
+            {
+                workingImage.Source = imageProcessor.GIGAImage.Source;
+            }
+            imageProcessor.AdjustRedColor(workingImage, sliderR.Value);
+        }
+
+        private void G_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (imageProcessor.GIGAImage != null)
+            {
+                workingImage.Source = imageProcessor.GIGAImage.Source;
+            }
+            imageProcessor.AdjustGreenColor(workingImage, sliderG.Value);
+        }
+
+        private void B_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (imageProcessor.GIGAImage != null)
+            {
+                workingImage.Source = imageProcessor.GIGAImage.Source;
+            }
+            imageProcessor.AdjustBlueColor(workingImage, sliderB.Value);
+        }
+
+        private void A_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (imageProcessor.GIGAImage != null)
+            {
+                workingImage.Source = imageProcessor.GIGAImage.Source;
+            }
+            imageProcessor.AdjustOpacity(workingImage, sliderA.Value);
+        }
+
+        private void mouseButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void paintButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void upscaleButton_Click(object sender, RoutedEventArgs e)
@@ -121,7 +184,5 @@ namespace PictureViewer
         {
             /*Здесь будет функция, добавляющая на canvas другие изображения*/
         }
-
-
     }
 }

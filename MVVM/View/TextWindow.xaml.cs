@@ -1,6 +1,8 @@
-﻿using System;
+﻿using PictureViewer.MVVM.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,11 +19,26 @@ namespace PictureViewer.MVVM.View
     /// <summary>
     /// Логика взаимодействия для Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class TextWindow : Window
     {
-        public Window1()
+        public TextWindow()
         {
             InitializeComponent();
+        }
+        public TextProcessor GetText()
+        {
+            TextProcessor textProcessor = new TextProcessor();
+
+            textProcessor.content = textContent.Text;
+            textProcessor.size = Convert.ToDouble(textSize.Text);
+            textProcessor.posX = Convert.ToDouble(textPosX.Text);
+            textProcessor.posY = Convert.ToDouble(textPosY.Text);
+            return textProcessor;
+        }
+        private void buttonAddText_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            this.Close();
         }
     }
 }

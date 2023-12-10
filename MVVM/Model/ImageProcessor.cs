@@ -1,7 +1,11 @@
 ﻿using Microsoft.Win32;
+using PictureViewer.MVVM.View;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,16 +15,24 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Xml.Linq;
 
 namespace PictureViewer.MVVM.Model
 {
+
     public class ImageProcessor
     {
+        public Image GIGAImage { get; set; }
+       
+        public ImageProcessor()
+        {
+            GIGAImage = new Image();
+        }
         private void updateImage(Image targetImage, Image sourceImage)
         {
             targetImage.Source = sourceImage.Source;
@@ -37,7 +49,7 @@ namespace PictureViewer.MVVM.Model
             {
                 image.Source = new BitmapImage(new Uri(op.FileName));
             }
-
+        
             return image;
         }
 
@@ -128,6 +140,267 @@ namespace PictureViewer.MVVM.Model
             }
         }
 
+        public Image AddTextToImage(Image image)
+        {
+            TextWindow textWindow = new TextWindow();
+            bool? result = textWindow.ShowDialog();
 
+            if (result == true)
+            {
+                TextProcessor textProcessor = textWindow.GetText();
+
+                RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
+                    (int)image.ActualWidth, (int)image.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+
+                TextBlock textBlock = new TextBlock
+                {
+                    Text = textProcessor.content,
+                    FontSize = textProcessor.size,
+                    Foreground = new SolidColorBrush(Colors.Black)
+                };
+                textBlock.Measure(new Size(image.ActualWidth, image.ActualHeight));
+                textBlock.Arrange(new Rect(0, 0, image.ActualWidth, image.ActualHeight));
+
+                renderTargetBitmap.Render(image);
+
+                DrawingVisual visual = new DrawingVisual();
+                using (DrawingContext context = visual.RenderOpen())
+                {
+                    context.DrawImage(renderTargetBitmap, new Rect(0, 0, image.ActualWidth, image.ActualHeight));
+                    context.DrawText(new FormattedText(textProcessor.content, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Arial"), textProcessor.size, Brushes.Black), new Point(textProcessor.posX, textProcessor.posY));
+                }
+
+                RenderTargetBitmap finalRenderTargetBitmap = new RenderTargetBitmap(
+                    (int)image.ActualWidth, (int)image.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+                finalRenderTargetBitmap.Render(visual);
+
+                BitmapSource resizedImage = new FormatConvertedBitmap(finalRenderTargetBitmap, PixelFormats.Pbgra32, null, 0);
+
+                Image finalImageWithText = new Image();
+                finalImageWithText.Source = resizedImage;
+
+                updateImage(image, finalImageWithText);
+
+                return finalImageWithText;
+            }
+
+            return image;
+        }
+
+        public Image AdjustBrightness(Image originalImage, double sliderValue)
+        {
+            Image newImage = new Image();
+            //originalImage = GIGAImage;
+            sliderValue = Math.Max(0, Math.Min(100, sliderValue));
+
+            if (originalImage.Source is BitmapSource bitmapSource)
+            {
+                
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                {
+                    // Добавляем только оригинальное изображение, если sliderValue = 50
+                    if (sliderValue != 50)
+                    {
+                        System.Windows.Media.Color overlayColor = (sliderValue > 50) ? Colors.White : Colors.Black;
+                        int overlayAlpha = (sliderValue > 50) ? (int)(2.55 * (sliderValue - 50)) : (int)(2.55 * (50 - sliderValue));
+                        System.Windows.Media.Color overlayColorWithAlpha = System.Windows.Media.Color.FromArgb((byte)overlayAlpha, overlayColor.R, overlayColor.G, overlayColor.B);
+
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                        drawingContext.DrawRectangle(new SolidColorBrush(overlayColorWithAlpha), null, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                    else
+                    {
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                }
+
+                RenderTargetBitmap resultImage = new RenderTargetBitmap(bitmapSource.PixelWidth, bitmapSource.PixelHeight, bitmapSource.DpiX, bitmapSource.DpiY, PixelFormats.Pbgra32);
+                resultImage.Render(drawingVisual);
+
+                newImage.Source = resultImage;
+
+                // Обновление свойств изображения, чтобы сохранить пропорции
+                updateImage(originalImage,newImage);
+            }
+            else
+            {
+                // Обработка случая, когда originalImage.Source не является BitmapSource
+                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+            }
+
+            return newImage;
+        }
+
+        public Image AdjustRedColor(Image originalImage, double sliderValue)
+        {
+            Image newImage = new Image();
+
+            sliderValue = Math.Max(0, Math.Min(100, sliderValue));
+
+            if (originalImage.Source is BitmapSource bitmapSource)
+            {
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                {
+                    // Добавляем только оригинальное изображение, если sliderValue не равен 0
+                    if (sliderValue != 0)
+                    {
+                        byte redColorValue = (byte)(255 * (sliderValue / 100)); // Изменение красного цвета от 0 до 255
+
+                        System.Windows.Media.Color overlayColor = Color.FromArgb((byte)(sliderValue * 2.55), redColorValue, 0, 0);
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                        drawingContext.DrawRectangle(new SolidColorBrush(overlayColor), null, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                    else
+                    {
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                }
+
+                RenderTargetBitmap resultImage = new RenderTargetBitmap(bitmapSource.PixelWidth, bitmapSource.PixelHeight, bitmapSource.DpiX, bitmapSource.DpiY, PixelFormats.Pbgra32);
+                resultImage.Render(drawingVisual);
+
+                newImage.Source = resultImage;
+
+                // Обновление свойств изображения, чтобы сохранить пропорции
+                updateImage(originalImage, newImage);
+            }
+            else
+            {
+                // Обработка случая, когда originalImage.Source не является BitmapSource
+                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+            }
+
+            return newImage;
+        }
+
+        public Image AdjustGreenColor(Image originalImage, double sliderValue)
+        {
+            Image newImage = new Image();
+
+            sliderValue = Math.Max(0, Math.Min(100, sliderValue));
+
+            if (originalImage.Source is BitmapSource bitmapSource)
+            {
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                {
+                    // Добавляем только оригинальное изображение, если sliderValue не равен 0
+                    if (sliderValue != 0)
+                    {
+                        byte greenColorValue = (byte)(255 * (sliderValue / 100)); // Изменение красного цвета от 0 до 255
+
+                        System.Windows.Media.Color overlayColor = Color.FromArgb((byte)(sliderValue * 2.55), 0, greenColorValue, 0);
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                        drawingContext.DrawRectangle(new SolidColorBrush(overlayColor), null, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                    else
+                    {
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                }
+
+                RenderTargetBitmap resultImage = new RenderTargetBitmap(bitmapSource.PixelWidth, bitmapSource.PixelHeight, bitmapSource.DpiX, bitmapSource.DpiY, PixelFormats.Pbgra32);
+                resultImage.Render(drawingVisual);
+
+                newImage.Source = resultImage;
+
+                // Обновление свойств изображения, чтобы сохранить пропорции
+                updateImage(originalImage, newImage);
+            }
+            else
+            {
+                // Обработка случая, когда originalImage.Source не является BitmapSource
+                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+            }
+
+            return newImage;
+        }
+        public Image AdjustBlueColor(Image originalImage, double sliderValue)
+        {
+            Image newImage = new Image();
+
+            sliderValue = Math.Max(0, Math.Min(100, sliderValue));
+
+            if (originalImage.Source is BitmapSource bitmapSource)
+            {
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                {
+                    // Добавляем только оригинальное изображение, если sliderValue не равен 0
+                    if (sliderValue != 0)
+                    {
+                        byte blueColorValue = (byte)(255 * (sliderValue / 100)); // Изменение красного цвета от 0 до 255
+
+                        System.Windows.Media.Color overlayColor = Color.FromArgb((byte)(sliderValue * 2.55), 0, 0, blueColorValue);
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                        drawingContext.DrawRectangle(new SolidColorBrush(overlayColor), null, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                    else
+                    {
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                }
+
+                RenderTargetBitmap resultImage = new RenderTargetBitmap(bitmapSource.PixelWidth, bitmapSource.PixelHeight, bitmapSource.DpiX, bitmapSource.DpiY, PixelFormats.Pbgra32);
+                resultImage.Render(drawingVisual);
+
+                newImage.Source = resultImage;
+
+                // Обновление свойств изображения, чтобы сохранить пропорции
+                updateImage(originalImage, newImage);
+            }
+            else
+            {
+                // Обработка случая, когда originalImage.Source не является BitmapSource
+                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+            }
+
+            return newImage;
+        }
+
+        public Image AdjustOpacity(Image originalImage, double sliderValue)
+        {
+            Image newImage = new Image();
+
+            sliderValue = Math.Max(0, Math.Min(100, sliderValue));
+
+            if (originalImage.Source is BitmapSource bitmapSource)
+            {
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                {
+                    if (sliderValue != 0)
+                    {
+                        // Задаем альфа-канал прозрачности, изменяя его от 0 до 255 в зависимости от sliderValue
+                        byte alphaValue = (byte)(255 * (sliderValue / 100));
+
+                        System.Windows.Media.Color overlayColor = Color.FromArgb(alphaValue, 255, 255, 255);
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                        drawingContext.DrawRectangle(new SolidColorBrush(overlayColor), null, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                    else
+                    {
+                        drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
+                    }
+                }
+
+                RenderTargetBitmap resultImage = new RenderTargetBitmap(bitmapSource.PixelWidth, bitmapSource.PixelHeight, bitmapSource.DpiX, bitmapSource.DpiY, PixelFormats.Pbgra32);
+                resultImage.Render(drawingVisual);
+
+                newImage.Source = resultImage;
+
+                // Обновление свойств изображения, чтобы сохранить пропорции
+                updateImage(originalImage, newImage);
+            }
+            else
+            {
+                // Обработка случая, когда originalImage.Source не является BitmapSource
+                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+            }
+
+            return newImage;
+        }
     }
 }
