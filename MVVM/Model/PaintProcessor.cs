@@ -9,7 +9,7 @@ namespace PictureViewer.MVVM.Model
 {
     public class PaintProcessor
     {
-        double size {  get; set; }
-        Color color { get; set; }
+        public double size {  get; set; }
+        public Color color { get; set; }
     }
 }

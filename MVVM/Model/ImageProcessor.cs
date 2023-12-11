@@ -199,7 +199,6 @@ namespace PictureViewer.MVVM.Model
                 DrawingVisual drawingVisual = new DrawingVisual();
                 using (DrawingContext drawingContext = drawingVisual.RenderOpen())
                 {
-                    // Добавляем только оригинальное изображение, если sliderValue = 50
                     if (sliderValue != 50)
                     {
                         System.Windows.Media.Color overlayColor = (sliderValue > 50) ? Colors.White : Colors.Black;
@@ -220,13 +219,11 @@ namespace PictureViewer.MVVM.Model
 
                 newImage.Source = resultImage;
 
-                // Обновление свойств изображения, чтобы сохранить пропорции
                 updateImage(originalImage,newImage);
             }
             else
             {
-                // Обработка случая, когда originalImage.Source не является BitmapSource
-                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+
             }
 
             return newImage;
@@ -243,10 +240,9 @@ namespace PictureViewer.MVVM.Model
                 DrawingVisual drawingVisual = new DrawingVisual();
                 using (DrawingContext drawingContext = drawingVisual.RenderOpen())
                 {
-                    // Добавляем только оригинальное изображение, если sliderValue не равен 0
                     if (sliderValue != 0)
                     {
-                        byte redColorValue = (byte)(255 * (sliderValue / 100)); // Изменение красного цвета от 0 до 255
+                        byte redColorValue = (byte)(255 * (sliderValue / 100)); 
 
                         System.Windows.Media.Color overlayColor = Color.FromArgb((byte)(sliderValue * 2.55), redColorValue, 0, 0);
                         drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
@@ -263,13 +259,11 @@ namespace PictureViewer.MVVM.Model
 
                 newImage.Source = resultImage;
 
-                // Обновление свойств изображения, чтобы сохранить пропорции
                 updateImage(originalImage, newImage);
             }
             else
             {
-                // Обработка случая, когда originalImage.Source не является BitmapSource
-                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+
             }
 
             return newImage;
@@ -286,10 +280,9 @@ namespace PictureViewer.MVVM.Model
                 DrawingVisual drawingVisual = new DrawingVisual();
                 using (DrawingContext drawingContext = drawingVisual.RenderOpen())
                 {
-                    // Добавляем только оригинальное изображение, если sliderValue не равен 0
                     if (sliderValue != 0)
                     {
-                        byte greenColorValue = (byte)(255 * (sliderValue / 100)); // Изменение красного цвета от 0 до 255
+                        byte greenColorValue = (byte)(255 * (sliderValue / 100)); 
 
                         System.Windows.Media.Color overlayColor = Color.FromArgb((byte)(sliderValue * 2.55), 0, greenColorValue, 0);
                         drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
@@ -306,13 +299,11 @@ namespace PictureViewer.MVVM.Model
 
                 newImage.Source = resultImage;
 
-                // Обновление свойств изображения, чтобы сохранить пропорции
                 updateImage(originalImage, newImage);
             }
             else
             {
-                // Обработка случая, когда originalImage.Source не является BitmapSource
-                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+           
             }
 
             return newImage;
@@ -328,10 +319,9 @@ namespace PictureViewer.MVVM.Model
                 DrawingVisual drawingVisual = new DrawingVisual();
                 using (DrawingContext drawingContext = drawingVisual.RenderOpen())
                 {
-                    // Добавляем только оригинальное изображение, если sliderValue не равен 0
                     if (sliderValue != 0)
                     {
-                        byte blueColorValue = (byte)(255 * (sliderValue / 100)); // Изменение красного цвета от 0 до 255
+                        byte blueColorValue = (byte)(255 * (sliderValue / 100)); 
 
                         System.Windows.Media.Color overlayColor = Color.FromArgb((byte)(sliderValue * 2.55), 0, 0, blueColorValue);
                         drawingContext.DrawImage(bitmapSource, new Rect(0, 0, bitmapSource.PixelWidth, bitmapSource.PixelHeight));
@@ -348,13 +338,11 @@ namespace PictureViewer.MVVM.Model
 
                 newImage.Source = resultImage;
 
-                // Обновление свойств изображения, чтобы сохранить пропорции
                 updateImage(originalImage, newImage);
             }
             else
             {
-                // Обработка случая, когда originalImage.Source не является BitmapSource
-                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+
             }
 
             return newImage;
@@ -373,7 +361,6 @@ namespace PictureViewer.MVVM.Model
                 {
                     if (sliderValue != 0)
                     {
-                        // Задаем альфа-канал прозрачности, изменяя его от 0 до 255 в зависимости от sliderValue
                         byte alphaValue = (byte)(255 * (sliderValue / 100));
 
                         System.Windows.Media.Color overlayColor = Color.FromArgb(alphaValue, 255, 255, 255);
@@ -391,16 +378,19 @@ namespace PictureViewer.MVVM.Model
 
                 newImage.Source = resultImage;
 
-                // Обновление свойств изображения, чтобы сохранить пропорции
                 updateImage(originalImage, newImage);
             }
             else
             {
-                // Обработка случая, когда originalImage.Source не является BitmapSource
-                // Возможно, нужно принять другие действия в зависимости от вашего контекста
+
             }
 
             return newImage;
         }
-    }
+
+        public Image DrawOnImage(Image originalImage)
+        {
+            return null;
+        }
+    }  
 }

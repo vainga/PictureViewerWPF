@@ -10,7 +10,8 @@
         <DockPanel LastChildFill="True" Margin="124,20,48,41">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <InkCanvas x:Name="canvas"  EditingMode="None">
-                    <Image x:Name="workingImage" Stretch="Uniform"/>
+                    <Image x:Name="workingImage" Stretch="Uniform" MouseMove="ResultImage_MouseMove"/>
+                    <InkCanvas x:Name="editCanvas" Visibility="Hidden" EditingMode="None"  Background="White" Width="{Binding ElementName=workingImage, Path=ActualWidth}" Height="{Binding ElementName=workingImage, Path=ActualHeight}" Margin="{Binding ElementName=workingImage, Path=Margin}"/>
                     <Path Fill="Gray" Opacity="0.5">
                         <Path.Data>
                             <CombinedGeometry GeometryCombineMode="Exclude">

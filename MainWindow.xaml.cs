@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+//using static System.Net.Mime.MediaTypeNames;
 
 namespace PictureViewer
 {
@@ -39,8 +40,8 @@ namespace PictureViewer
         }
 
         private ImageProcessor imageProcessor = new ImageProcessor();
-
-        //public Image Crop(int x, int y, int width, int height) {}
+        private bool isPainting = false;
+        PaintProcessor paintProcessor = new PaintProcessor();
 
         private void loadImageButton_Click(object sender, RoutedEventArgs e)
         {
@@ -149,12 +150,18 @@ namespace PictureViewer
 
         private void mouseButton_Click(object sender, RoutedEventArgs e)
         {
-
+            isPainting = false;
         }
 
         private void paintButton_Click(object sender, RoutedEventArgs e)
         {
-
+            isPainting = true;
+            PaintWindow paintWindow = new PaintWindow();
+            bool? result = paintWindow.ShowDialog();
+            if (result == true)
+            {
+                paintProcessor = paintWindow.GetPaint();
+            }
         }
 
         private void upscaleButton_Click(object sender, RoutedEventArgs e)
@@ -184,5 +191,31 @@ namespace PictureViewer
         {
             /*Здесь будет функция, добавляющая на canvas другие изображения*/
         }
+
+        private void ResultImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isPainting && e.LeftButton == MouseButtonState.Pressed)
+            {
+                Image resultImage = (Image)sender;
+                Point currentPosition = e.GetPosition(resultImage);
+
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                {
+                    drawingContext.DrawImage(((BitmapSource)resultImage.Source), new Rect(0, 0, resultImage.ActualWidth, resultImage.ActualHeight));
+                    drawingContext.DrawEllipse(new SolidColorBrush(paintProcessor.color), null, currentPosition, paintProcessor.size, paintProcessor.size);
+                }
+
+                RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
+                    (int)resultImage.ActualWidth, (int)resultImage.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+
+                renderTargetBitmap.Render(drawingVisual);
+
+                resultImage.Source = renderTargetBitmap;
+            }
+            
+        }
+
+
     }
 }
