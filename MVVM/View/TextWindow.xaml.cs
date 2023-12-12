@@ -1,4 +1,5 @@
 ﻿using PictureViewer.MVVM.Model;
+using PictureViewer.MVVM.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace PictureViewer.MVVM.View
     /// </summary>
     public partial class TextWindow : Window
     {
+
         public TextWindow()
         {
             InitializeComponent();

@@ -120,6 +120,9 @@
     <Compile Include="MVVM\Model\PaintProcessor.cs" />
     <Compile Include="MVVM\Model\RedColor.cs" />
     <Compile Include="MVVM\Model\TextProcessor.cs" />
+    <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\PaintViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\TextViewModel.cs" />
     <Compile Include="MVVM\View\PaintWindow.xaml.cs">
       <DependentUpon>PaintWindow.xaml</DependentUpon>
     </Compile>
@@ -152,10 +155,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MVVM\ViewModel\" />
-    <Folder Include="Tests\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\paint.jpg" />
   </ItemGroup>

@@ -15,7 +15,6 @@ namespace PictureViewer.Interfaces
     internal interface IImageProcessor
     {
         Image GIGAImage { get; set; }
-        void updateImage(Image targetImage, Image sourceImage);
         Image CropImage(Image image);
         Image turnCWImage(Image image);
         Image turnCCWImage(Image image);

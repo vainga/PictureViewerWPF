@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 namespace PictureViewer.MVVM.Model
 {
 
-    public class ImageProcessor
+    public class ImageProcessor : IImageProcessor
     {
         public Image GIGAImage { get; set; }
 
