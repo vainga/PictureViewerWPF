@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -59,7 +60,7 @@ namespace PictureViewer.MVVM.Model
             }
         }
 
-        private BitmapSource canvasToBitmap(InkCanvas canv)
+        public BitmapSource canvasToBitmap(InkCanvas canv)
         {
             int resWidth = (int)(canv.DesiredSize.Width);
             int resHeight = (int)(canv.DesiredSize.Height);

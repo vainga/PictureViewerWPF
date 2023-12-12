@@ -75,13 +75,33 @@ namespace PictureViewer
         
 
         private void cropImageButton_Click(object sender, RoutedEventArgs e)
-        {
-            imageProcessor.GIGAImage.Source = imageProcessor.CropImage(workingImage).Source;
+        {   if (isCanvas)
+            {
+                imageProcessor.GIGAImage.Source = imageProcessor.CropImage(workingImage).Source;
+                cropRectOut.Rect = new Rect();
+                cropRectIn.Rect = new Rect();
+                cropImageButton.Visibility = Visibility.Hidden;
+                cancelCropImageButton.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                cropImageButton.Visibility = Visibility.Hidden;
+                cancelCropImageButton.Visibility = Visibility.Hidden;
 
-            cropRectOut.Rect = new Rect();
-            cropRectIn.Rect = new Rect();
-            cropImageButton.Visibility = Visibility.Hidden;
-            cancelCropImageButton.Visibility = Visibility.Hidden;
+                Image cropped = new Image();
+                cropped.Width = cropRectIn.Rect.Width;
+                cropped.Height = cropRectIn.Rect.Height;
+
+                CroppedBitmap cb = new CroppedBitmap(canvasProcessor.canvasToBitmap(canvas), new Int32Rect((int)cropRectIn.Rect.Left, (int)cropRectIn.Rect.Top, (int)cropped.Width, (int)cropped.Height));
+                cropped.Source = cb;
+                canvas.Children.Clear();
+                canvas.Children.Add(cropped);
+                canvas.Width = cropped.Width;
+                canvas.Height = cropped.Height;
+
+                cropRectOut.Rect = new Rect();
+                cropRectIn.Rect = new Rect();
+            }
         }
 
         private void cancelCropImageButton_Click(object sender, RoutedEventArgs e)
@@ -175,12 +195,14 @@ namespace PictureViewer
 
         private void upscaleButton_Click(object sender, RoutedEventArgs e)
         {
-            imageProcessor.UpscaleImage(workingImage);
+            scaleTransform.ScaleX *= 1.5;
+            scaleTransform.ScaleY *= 1.5;
         }
 
         private void downscaleButton_Click(object sender, RoutedEventArgs e)
         {
-            imageProcessor.DownscaleImage(workingImage);
+            scaleTransform.ScaleX /= 1.5;
+            scaleTransform.ScaleY /= 1.5;
         }
 
         private void collageOnButton_Checked(object sender, RoutedEventArgs e)
