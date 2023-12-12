@@ -24,6 +24,40 @@ namespace PictureViewer.MVVM.Model
             targetImage.Source = sourceImage.Source;
         }
 
+        public Image UpscaleImage(Image image)
+        {
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                drawingContext.DrawImage(((BitmapSource)image.Source), new Rect(0, 0, image.ActualWidth*1.5, image.ActualHeight*1.5));
+            }
+
+            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
+                (int)image.ActualWidth, (int)image.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+
+            renderTargetBitmap.Render(drawingVisual);
+
+            image.Source = renderTargetBitmap;
+            return image;
+        }
+
+        public Image DownscaleImage(Image image)
+        {
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                drawingContext.DrawImage(((BitmapSource)image.Source), new Rect(0, 0, image.ActualWidth * 0.5, image.ActualHeight * 0.5));
+            }
+
+            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
+                (int)image.ActualWidth, (int)image.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+
+            renderTargetBitmap.Render(drawingVisual);
+
+            image.Source = renderTargetBitmap;
+            return image;
+        }
+
 
         public Image CropImage(Image image)
         {

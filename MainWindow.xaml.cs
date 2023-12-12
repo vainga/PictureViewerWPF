@@ -44,8 +44,9 @@ namespace PictureViewer
         private IImageProcessor imageProcessor = new ImageProcessor();
         private IPaintProcessor paintProcessor = new PaintProcessor();
         private ITextProcessor textProcessor = new TextProcessor();
+        private IImageCanvas canvasProcessor = new ImageCanvas();
         private bool isPainting = false;
-
+        private bool isCanvas = false;
 
         private void loadImageButton_Click(object sender, RoutedEventArgs e)
         {
@@ -71,6 +72,7 @@ namespace PictureViewer
             cropRectIn.Rect = new Rect((int)(0.2 * workingImage.ActualWidth), (int)(0.2 * workingImage.ActualHeight), (int)(0.4 * workingImage.ActualWidth), (int)(0.4 * workingImage.ActualHeight));
 
         }
+        
 
         private void cropImageButton_Click(object sender, RoutedEventArgs e)
         {
@@ -104,7 +106,10 @@ namespace PictureViewer
 
         private void saveImageButton_Click(object sender, RoutedEventArgs e)
         {
-           imageData.saveImage(workingImage);
+            if (isCanvas)
+                canvasProcessor.saveCanvas(canvas);
+            else
+                imageData.saveImage(workingImage);
         }
 
         private void brightness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -170,30 +175,41 @@ namespace PictureViewer
 
         private void upscaleButton_Click(object sender, RoutedEventArgs e)
         {
-            
-
+            imageProcessor.UpscaleImage(workingImage);
         }
 
         private void downscaleButton_Click(object sender, RoutedEventArgs e)
         {
-
+            imageProcessor.DownscaleImage(workingImage);
         }
 
         private void collageOnButton_Checked(object sender, RoutedEventArgs e)
         {
             canvas.EditingMode = InkCanvasEditingMode.Select;
             CollageMode.Visibility = Visibility.Visible;
+            isCanvas = true;
         }
 
         private void collageOnButton_Unchecked(object sender, RoutedEventArgs e)
         {
             canvas.EditingMode = InkCanvasEditingMode.None;
             CollageMode.Visibility = Visibility.Hidden;
+            isCanvas = false;
         }
 
         private void addImageButton_Click(object sender, RoutedEventArgs e)
         {
-            /*Здесь будет функция, добавляющая на canvas другие изображения*/
+            Image newImage = new Image();
+            OpenFileDialog op = new OpenFileDialog();
+            op.Title = "Выбор изображения";
+            op.Filter = "Все файлы изображений|*.jpg;*.jpeg;*.png|" +
+              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+              "Portable Network Graphic (*.png)|*.png";
+            if (op.ShowDialog() == true)
+            {
+                newImage.Source = new BitmapImage(new Uri(op.FileName));
+            }
+            canvas.Children.Add(newImage);
         }
 
         private void ResultImage_MouseMove(object sender, MouseEventArgs e)

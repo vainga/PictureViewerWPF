@@ -11,7 +11,6 @@
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <InkCanvas x:Name="canvas"  EditingMode="None">
                     <Image x:Name="workingImage" Stretch="Uniform" MouseMove="ResultImage_MouseMove"/>
-                    <InkCanvas x:Name="editCanvas" Visibility="Hidden" EditingMode="None"  Background="White" Width="{Binding ElementName=workingImage, Path=ActualWidth}" Height="{Binding ElementName=workingImage, Path=ActualHeight}" Margin="{Binding ElementName=workingImage, Path=Margin}"/>
                     <Path Fill="Gray" Opacity="0.5">
                         <Path.Data>
                             <CombinedGeometry GeometryCombineMode="Exclude">
@@ -66,7 +65,7 @@
                     </DockPanel>
                     <CheckBox x:Name="collageOnButton" Width="70" DockPanel.Dock="Top" HorizontalAlignment="Left" Margin="4,4,0,0" Height="48" Checked="collageOnButton_Checked" Unchecked="collageOnButton_Unchecked">
                         <CheckBox.Content>
-                            <TextBlock Text="Режим коллажа (бета)" TextWrapping="Wrap"></TextBlock>
+                            <TextBlock Text="Режим коллажа" TextWrapping="Wrap"></TextBlock>
                         </CheckBox.Content>
                     </CheckBox>
                     <DockPanel x:Name="CollageMode" Visibility="Hidden" HorizontalAlignment="Left" LastChildFill="False" Margin="0,0,0,0" Width="86" Height="48" DockPanel.Dock="Top">

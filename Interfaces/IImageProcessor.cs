@@ -19,7 +19,8 @@ namespace PictureViewer.Interfaces
         Image turnCWImage(Image image);
         Image turnCCWImage(Image image);
         Image AdjustBrightness(Image originalImage, double sliderValue);
-
+        Image UpscaleImage(Image image);
+        Image DownscaleImage(Image image);
         Image AdjustRedColor(Image originalImage, double sliderValue);
         Image AdjustGreenColor(Image originalImage, double sliderValue);
         Image AdjustBlueColor(Image originalImage, double sliderValue);

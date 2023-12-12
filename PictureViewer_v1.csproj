@@ -91,6 +91,7 @@
     <Compile Include="Interfaces\IBrightness.cs" />
     <Compile Include="Interfaces\IColors.cs" />
     <Compile Include="Interfaces\IGreenColor.cs" />
+    <Compile Include="Interfaces\IImageCanvas.cs" />
     <Compile Include="Interfaces\IImageData.cs" />
     <Compile Include="Interfaces\IImageProcessor.cs" />
     <Compile Include="Interfaces\IPaintProcessor.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="MVVM\Model\AlphaChanelColor.cs" />
     <Compile Include="MVVM\Model\BlueColor.cs" />
     <Compile Include="MVVM\Model\Brightness.cs" />
+    <Compile Include="MVVM\Model\ImageCanvas.cs" />
     <Compile Include="MVVM\Model\ImageColors.cs" />
     <Compile Include="MVVM\Model\GreenColor.cs" />
     <Compile Include="MVVM\Model\ImageData.cs" />
