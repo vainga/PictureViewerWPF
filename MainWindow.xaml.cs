@@ -39,12 +39,13 @@ namespace PictureViewer
         {
             InitializeComponent();
         }
-        IImageData imageData = new ImageData();
 
-        private ImageProcessor imageProcessor = new ImageProcessor();
+        IImageData imageData = new ImageData();
+        private IImageProcessor imageProcessor = new ImageProcessor();
+        private IPaintProcessor paintProcessor = new PaintProcessor();
+        private ITextProcessor textProcessor = new TextProcessor();
         private bool isPainting = false;
-        PaintProcessor paintProcessor = new PaintProcessor();
-        TextProcessor textProcessor = new TextProcessor();
+
 
         private void loadImageButton_Click(object sender, RoutedEventArgs e)
         {

@@ -9,10 +9,11 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows;
+using PictureViewer.Interfaces;
 
 namespace PictureViewer.MVVM.Model
 {
-    public class TextProcessor
+    public class TextProcessor : ITextProcessor
     {
         public string content { get;  set; }
         public double size {  get;  set; }

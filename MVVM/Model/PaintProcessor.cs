@@ -8,9 +8,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows;
 using System.Windows.Controls;
+using PictureViewer.Interfaces;
+
 namespace PictureViewer.MVVM.Model
 {
-    public class PaintProcessor
+    public class PaintProcessor : IPaintProcessor
     {
         public double size {  get; set; }
         public Color color { get; set; }
