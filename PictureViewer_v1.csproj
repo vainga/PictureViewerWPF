@@ -86,6 +86,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\IAlphaChanelColor.cs" />
+    <Compile Include="Interfaces\IBlueColor.cs" />
+    <Compile Include="Interfaces\IBrightness.cs" />
+    <Compile Include="Interfaces\IColors.cs" />
+    <Compile Include="Interfaces\IGreenColor.cs" />
+    <Compile Include="Interfaces\IImageData.cs" />
+    <Compile Include="Interfaces\IImageProcessor.cs" />
+    <Compile Include="Interfaces\IPaintProcessor.cs" />
+    <Compile Include="Interfaces\IRedColor.cs" />
+    <Compile Include="Interfaces\ITetxProcessor.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -100,8 +110,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MVVM\Model\AlphaChanelColor.cs" />
+    <Compile Include="MVVM\Model\BlueColor.cs" />
+    <Compile Include="MVVM\Model\Brightness.cs" />
+    <Compile Include="MVVM\Model\ImageColors.cs" />
+    <Compile Include="MVVM\Model\GreenColor.cs" />
+    <Compile Include="MVVM\Model\ImageData.cs" />
     <Compile Include="MVVM\Model\ImageProcessor.cs" />
     <Compile Include="MVVM\Model\PaintProcessor.cs" />
+    <Compile Include="MVVM\Model\RedColor.cs" />
     <Compile Include="MVVM\Model\TextProcessor.cs" />
     <Compile Include="MVVM\View\PaintWindow.xaml.cs">
       <DependentUpon>PaintWindow.xaml</DependentUpon>
@@ -137,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MVVM\ViewModel\" />
+    <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\paint.jpg" />

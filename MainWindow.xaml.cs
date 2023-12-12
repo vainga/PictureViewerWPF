@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using PictureViewer.Interfaces;
 using PictureViewer.MVVM.Model;
 using PictureViewer.MVVM.View;
 using System;
@@ -38,26 +39,28 @@ namespace PictureViewer
         {
             InitializeComponent();
         }
+        IImageData imageData = new ImageData();
 
         private ImageProcessor imageProcessor = new ImageProcessor();
         private bool isPainting = false;
         PaintProcessor paintProcessor = new PaintProcessor();
+        TextProcessor textProcessor = new TextProcessor();
 
         private void loadImageButton_Click(object sender, RoutedEventArgs e)
         {
             if(imageProcessor.GIGAImage != null)
             {
-                imageProcessor.GIGAImage.Source = imageProcessor.LoadImage(workingImage).Source;
+                imageProcessor.GIGAImage.Source = imageData.LoadImage(workingImage).Source;
             }
             else
             {
-
+                throw new ArgumentException("Ошибка открытия изображения!");
             }
         }
 
         private void addTextButton_Click(Object sender, RoutedEventArgs e)
         {
-            imageProcessor.AddTextToImage(workingImage);
+            textProcessor.AddTextToImage(workingImage);
         }
         private void preCropImageButton_Click(object sender, RoutedEventArgs e)
         {
@@ -100,7 +103,7 @@ namespace PictureViewer
 
         private void saveImageButton_Click(object sender, RoutedEventArgs e)
         {
-           imageProcessor.saveImage(workingImage);
+           imageData.saveImage(workingImage);
         }
 
         private void brightness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -195,25 +198,11 @@ namespace PictureViewer
         private void ResultImage_MouseMove(object sender, MouseEventArgs e)
         {
             if (isPainting && e.LeftButton == MouseButtonState.Pressed)
-            {
+            { 
                 Image resultImage = (Image)sender;
                 Point currentPosition = e.GetPosition(resultImage);
-
-                DrawingVisual drawingVisual = new DrawingVisual();
-                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-                {
-                    drawingContext.DrawImage(((BitmapSource)resultImage.Source), new Rect(0, 0, resultImage.ActualWidth, resultImage.ActualHeight));
-                    drawingContext.DrawEllipse(new SolidColorBrush(paintProcessor.color), null, currentPosition, paintProcessor.size, paintProcessor.size);
-                }
-
-                RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(
-                    (int)resultImage.ActualWidth, (int)resultImage.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-
-                renderTargetBitmap.Render(drawingVisual);
-
-                resultImage.Source = renderTargetBitmap;
+                paintProcessor.DrawOnImage(workingImage, currentPosition);
             }
-            
         }
 
 
